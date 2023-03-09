@@ -135,8 +135,10 @@
                     $getUserData = $conn->query($getUserSql);
                     $user = $getUserData->fetch_assoc();
                     echo '<li><strong> '.$user['fullname'].' </strong> &emsp;'.$row1['review'].' <em>'.$row1['added_on'].' </em>&emsp;';
-                    if(($_SESSION['user_id'] != '') && $_SESSION['user_id'] == $row1['user_id']) {
-                        echo '<a href="./operation/review_operation.php?action=delete&id='.$row1['id'].'" style="color:red;">Delete Review</a></li>';
+                    if(isset($_SESSION['user_id'])){
+                      if(($_SESSION['user_id'] != '') && $_SESSION['user_id'] == $row1['user_id']) {
+                          echo '<a href="./operation/review_operation.php?action=delete&id='.$row1['id'].'" style="color:red;">Delete Review</a></li>';
+                      }
                     }
                 }
             ?>

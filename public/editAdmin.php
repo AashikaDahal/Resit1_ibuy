@@ -1,10 +1,10 @@
 <?php 
     include("./dbConnection.php");
     if($_SESSION['user_role'] != '' && $_SESSION['user_role'] == 'admin'){
-        $id = $conn->real_escape_string($_GET['id']);
+        $id = $conn->$_GET['id']);
         $getUsersDataSql = "SELECT * FROM `tbl_users` WHERE `id` ='$id'";
         $result = $conn->query($getUsersDataSql);
-        $data = $result->fetch_assoc();
+        $data = $result->fetch(PDO::FETCH_ASSOC);;
         //  echo
 ?>
 <!DOCTYPE html>
@@ -57,6 +57,8 @@
         </body>
     </html>
     <?php }else{
-    header("Location: ./login.php");
+    // header("Location: ./login.php");
+    echo '<script>window.location.href="login.php"</script>';
+
 }
 ?>

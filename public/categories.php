@@ -51,7 +51,7 @@
         <?php 
           $getUsersDataSql = "SELECT * FROM `tbl_categories` ORDER BY id ASC";
           $result = $conn->query($getUsersDataSql);
-          while($data = $result->fetch_assoc()){
+          while($data = $result->fetch(PDO::FETCH_ASSOC)){
         ?>
         <li><a class="categoryLink" href="./categories.php?id=<?php echo $data['id'] ?>"><?php echo $data['category_name'] ?></a></li>
         <?php } ?>
@@ -63,7 +63,7 @@
       <?php
           $getCategoryTitleSql = "SELECT * FROM `tbl_categories` WHERE id = '$id'";
           $result = $conn->query($getCategoryTitleSql);
-          $title = $result->fetch_assoc();
+          $title = $result->fetch(PDO::FETCH_ASSOC);;
           echo $title['category_name'];
       ?>
     </h2>
@@ -74,7 +74,7 @@
       <?php
         $getCategoriesDataSql = "SELECT * FROM `tbl_auctions` WHERE category_id = '$id'";
         $result = $conn->query($getCategoriesDataSql);
-        while($data = $result->fetch_assoc()){
+        while($data = $result->fetch(PDO::FETCH_ASSOC)){
       ?>
         <li>
             <img src="./product.png" alt="Avatar" style="height:12rem;width:35rem;">
@@ -83,7 +83,7 @@
             <h3>
                 <?php
                     $getCategory = $conn->query("SELECT * FROM tbl_categories WHERE id = '{$data['category_id']}' limit 1");
-                    $category = $getCategory->fetch_assoc();
+                    $category = $getCategory->fetch(PDO::FETCH_ASSOC);;
                     echo $category['category_name']; 
                 ?>
             </h3>
@@ -92,8 +92,8 @@
             <p class="price">Current Highest bid: £ <?php
                 $getMyBidSql = "SELECT * FROM tbl_bids WHERE product_id = '{$data['id']}' ORDER BY price DESC LIMIT 1";
                 $getMyBidData = $conn->query($getMyBidSql);
-                if($getMyBidData->num_rows > 0){
-                    while($row = $getMyBidData->fetch_assoc()){
+                if($getMyBidData->rowCount() > 0){
+                    while($row = $getMyBidData->fetch(PDO::FETCH_ASSOC)){
                         echo (float)$row['price'];
                     }
                 }else{

@@ -7,9 +7,9 @@
         if(isset($_POST['action'])){
             if($_POST['action'] == 'add') {
                 // var_dump($_POST);
-                $productId =  ucfirst($conn -> real_escape_string($_POST['id']));
-                $price =  ucfirst($conn -> real_escape_string($_POST['bid']));
-                $userId =  ucfirst($conn -> real_escape_string($_SESSION['user_id']));
+                $productId = ucfirst($_POST['id']);
+                $price = ucfirst($_POST['bid']);
+                $userId = $_SESSION['user_id'];
               //The first line checks if the 'action' parameter in the submitted form data is set to 'add'.
               //code extracts the values of the 'id', 'bid', and 'user_id' parameters from the $_POST and $_SESSION  arrays only if the condition is true.
 
@@ -24,10 +24,11 @@
                 //I tried using the var_dump but it did not work.
                 if($insertBids){
                     $_SESSION['error_message'] ="Bids Added Successfully";
-                    header("Location: " . $_SERVER['HTTP_REFERER']);
+                    echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+                  
                 }else{
                     $_SESSION['error_message'] ="Bids Not Added";
-                    header("Location: " . $_SERVER['HTTP_REFERER']);
+                    echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                 }
     
             }
@@ -36,12 +37,17 @@
             if($_GET['action'] == 'delete'){
                 $id = $_GET['id'];
                 $deleteSql = "DELETE FROM  tbl_bids WHERE id = '$id'";
-                if($conn->query($deleteSql)==TRUE && $conn->affected_rows > 0){
+                // if($conn->query($deleteSql)==TRUE && $conn->affected_rows > 0){
+                //     $deleteSql = "DELETE FROM `tbl_auctions` WHERE `id` = ?";
+$stmt = $conn->prepare($deleteSql);
+$stmt->execute([$id]);
+if($stmt->rowCount() > 0){
                     $_SESSION['error_message'] ="Data Delete Successfully";
-                    header("Location: " . $_SERVER['HTTP_REFERER']);
+                    echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+                    
                 }else{
                     $_SESSION['error_message'] ="Sorry Some Technical Error Ocurred";
-                    header("Location: " . $_SERVER['HTTP_REFERER']);
+                    echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                     //The first line checks if the 'action' parameter is set in the URL query string using the $_GET array.
                     //Second line checks the "action" parameter is deleted or not.
                     //Connection of database is also shown is the code.
@@ -52,6 +58,6 @@
 
     }else{
         $_SESSION['error_message'] ="Please Login First";
-        header("Location: " . $_SERVER['HTTP_REFERER']);
+        //echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
     }
 ?>

@@ -37,7 +37,7 @@ $text = $_GET['search'];
         <?php 
           $getUsersDataSql = "SELECT * FROM `tbl_categories` ORDER BY id ASC";
           $result = $conn->query($getUsersDataSql);
-          while($data1 = $result->fetch_assoc()){
+          while($data1 = $result->fetch(PDO::FETCH_ASSOC);){
         ?>
         <li><a class="categoryLink" href="./categories.php?id=<?php echo $data1['id'] ?>"><?php echo $data1['category_name'] ?></a></li>
         <?php } ?>
@@ -56,7 +56,7 @@ $text = $_GET['search'];
       <ul class="productList">
         <?php
           $getSearchData = $conn->query($searchSql);
-          while($data = $getSearchData->fetch_assoc()){
+          while($data = $getSearchData->fetch(PDO::FETCH_ASSOC);){
 
 
         ?>
@@ -67,7 +67,7 @@ $text = $_GET['search'];
             <h3>
                 <?php
                     $getCategory = $conn->query("SELECT * FROM tbl_categories WHERE id = '{$data['category_id']}' limit 1");
-                    $category = $getCategory->fetch_assoc();
+                    $category = $getCategory->fetch(PDO::FETCH_ASSOC);;
                     echo $category['category_name']; 
                 ?>
             </h3>
@@ -76,8 +76,8 @@ $text = $_GET['search'];
             <p class="price">Current Highest bid: £ <?php
                 $getMyBidSql = "SELECT * FROM tbl_bids WHERE product_id = '{$data['id']}' ORDER BY price DESC LIMIT 1";
                 $getMyBidData = $conn->query($getMyBidSql);
-                if($getMyBidData->num_rows > 0){
-                    while($row = $getMyBidData->fetch_assoc()){
+                if($getMyBidData->rowCount() > 0){
+                    while($row = $getMyBidData->fetch(PDO::FETCH_ASSOC);){
                         echo (float)$row['price'];
                     }
                 }else{

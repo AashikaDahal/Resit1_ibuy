@@ -48,7 +48,7 @@
                                 $i = 1;
                                 $getUsersDataSql = "SELECT * FROM `tbl_categories` ORDER BY id DESC";
                                 $result = $conn->query($getUsersDataSql);
-                                while($data = $result->fetch_assoc()){
+                                while($data = $result->fetch(PDO::FETCH_ASSOC);){
                             ?>
                             <tr>
                                 <td><?php echo $i ?></td>
@@ -77,6 +77,8 @@
     </body>
 </html>
 <?php }else{
-    header("Location: ./login.php");
+    // header("Location: ./login.php");
+    echo '<script>window.location.href="login.php"</script>';
+
 }
 ?>

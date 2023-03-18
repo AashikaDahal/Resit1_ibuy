@@ -5,23 +5,20 @@ $today = date("Y-m-d H:i:s");
 $userEmail = $_SESSION["user_email"];
 if(isset($_POST["action"])){
     if($_POST["action"] == "add"){
-        $title =  $conn -> real_escape_string($_POST['title']);
-        $description =  $conn -> real_escape_string($_POST['description']);
-        $endDate =  $conn -> real_escape_string($_POST['endDate']);
-        $category =  $conn -> real_escape_string($_POST['category']);
-        $price =  $conn -> real_escape_string($_POST['price']);
+        $title =  $_POST['title'];
+        $description =  $_POST['description'];
+        $endDate = $_POST['endDate'];
+        $category =  $_POST['category'];
+        $price =   $_POST['price'];
         //real_escape_string function is a guard measure used to prevent Sql problems like attacks.
-        // echo $endDate;
-        // exit();
-        //$sqlCreateTaleAuctions = "CREATE TABLE `tbl_auctions` ( `id` INT NOT NULL AUTO_INCREMENT , `title` VARCHAR(256) NULL , `description` TEXT NULL , `category_id` INT(10) NULL ,`endDate` DATETIME NULL,`price` DECIMAL(10,2) NULL, `photo_location` VARCHAR(256) NULL , `photo_name` VARCHAR(256) NULL , `tbl_used_count` INT(10) DEFAULT 0 , `added_by` VARCHAR(256) NULL , `updated_by` DATETIME NULL , `added_on` VARCHAR(256) NULL , `updated_on` DATETIME NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
-        //$createTableAuctions = $conn->query($sqlCreateTaleAuctions);
-
+        
+        
         $sqlCheckAuctionExists = "SELECT * FROM `tbl_auctions` WHERE title = '$title'";
         $checkAuctionExists = $conn ->query($sqlCheckAuctionExists);
 
-        if($checkAuctionExists->num_rows >= 1) {
+        if($checkAuctionExists->rowCount() >= 1) {
             $_SESSION['error_message'] ="Title Already Exit";
-            header("Location: " . $_SERVER['HTTP_REFERER']);
+            echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
         }
         $image =  $_FILES['image'];
         $imageNames = $_FILES['image']['name'];
@@ -49,7 +46,7 @@ if(isset($_POST["action"])){
                 header("Location: ../manageAuction.php");
             }else{
                 $_SESSION['error_message'] ="Category Added Successfully";
-                header("Location: " . $_SERVER['HTTP_REFERER']);
+                echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                 //The first line tries to move an uploaded file to the specified directory using the move_uploaded_file function.
                 //$sqlInsertAuction-variable contains a SQL query to insert some data into a database table called 'tbl_auctions'.
             }
@@ -62,19 +59,21 @@ if(isset($_POST["action"])){
         echo "----------------------------------------------------------------";
         var_dump($_FILES);
         echo "</pre>";
-        $id =  $conn -> real_escape_string($_POST['id']);
-        $title =  $conn -> real_escape_string($_POST['title']);
-        $description =  $conn -> real_escape_string($_POST['description']);
-        $endDate =  $conn -> real_escape_string($_POST['endDate']);
-        $category =  $conn -> real_escape_string($_POST['category']);
-        $price =  $conn -> real_escape_string($_POST['price']);
+        $id =   $_POST['id'];
+        $title =   $_POST['title'];
+        $description =  $_POST['description'];
+        $endDate =  $_POST['endDate'];
+        $category =   $_POST['category'];
+        $price =  $_POST['price'];
 
         $sqlCheckAuctionExists = "SELECT * FROM `tbl_auctions` WHERE title = '$title' AND id != '$id";
-        $checkAuctionExists = $conn ->query($sqlCheckAuctionExists);
-
-        if($checkAuctionExists->num_rows >= 1) {
+        $checkAuctionExists = $conn ->prepare($sqlCheckAuctionExists);
+        $checkAuctionExists ->execute();
+        if($checkAuctionExists->rowCount() >= 1) {
             $_SESSION['error_message'] ="Title Already Exit";
-            header("Location: " . $_SERVER['HTTP_REFERER']);
+            echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+            //tbl_auctions is table 'title' is equal to $title.
+            //id colume not equal to $id.
         }
         if($_FILES['image']['name'] != ''){
             $image =  $_FILES['image'];
@@ -86,8 +85,8 @@ if(isset($_POST["action"])){
             // $photoName =  time().'.'.$imageExtension;
             $photoLocation = "./public/images/auctions/";
             $fileName = "../public/images/auctions/".$photoNameAndExtension;
-    
-    
+     
+               
             if(!file_exists($photoLocation)){
                 mkdir($photoLocation, 0777, true);
             }
@@ -101,7 +100,7 @@ if(isset($_POST["action"])){
                     header("Location: ../manageAuction.php");
                 }else{
                     $_SESSION['error_message'] ="Sorry, something went wrong!!";
-                    header("Location: " . $_SERVER['HTTP_REFERER']);
+                    echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                     //The function move_uploaded_file tries to move an uploaded file to the specified directory.
                 }
             }
@@ -114,19 +113,10 @@ if(isset($_POST["action"])){
                 header("Location: ../manageAuction.php");
             }else{
                 $_SESSION['error_message'] ="Sorry, something went wrong!!";
-                header("Location: " . $_SERVER['HTTP_REFERER']);
+                echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
             }
         }
-        // echo "i am here: ";
-        // if($updateAuction){
-        //     // countPlus("tbl_categories", $category);
-        //     $_SESSION['error_message'] ="Auction Updated Successfully";
-        //     header("Location: ../manageAuction.php");
-        // }else{
-        //     $_SESSION['error_message'] ="Sorry, something went wrong!!";
-        //     header("Location: " . $_SERVER['HTTP_REFERER']);
-        // }
-    }
+       
 
 }
 if(isset($_GET["action"])){
@@ -137,14 +127,14 @@ if(isset($_GET["action"])){
         if($conn->query($deleteAuctionSql)==TRUE && $conn->affected_rows > 0){
             // countMinus("tbl_categories", $category);
             $_SESSION['error_message'] ="Data Delete Successfully";
-            header("Location: " . $_SERVER['HTTP_REFERER']);
+            echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
         }else{
             $_SESSION['error_message'] ="Sorry Some Technical Error Ocurred";
-            header("Location: " . $_SERVER['HTTP_REFERER']);
+            echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
         }
         
     }
 
 }
-
+}
 ?>

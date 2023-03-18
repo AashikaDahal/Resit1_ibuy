@@ -1,16 +1,17 @@
 <?php 
     session_start();
   
-    // global $conn;
-   $servername = 'localhost';
-        $userName = 'root';
-        $password = '';
-        $dbName = 'ibuy';
-   try {
-  $conn = new Mysqli($servername,$userName,$password,$dbName);
+//     // global $conn;
+//    $servername = 'db';
+//         $userName = 'root';
+//         $password = 'root';
+//         $dbName = 'assignment1';
+ try {
+//   $conn = new PDO("mysql:$dbName,$servername,$userName,$password);
+  $conn = new PDO ('mysql:dbname=assignment1;host=db','root','root',[PDO::ATTR_ERRMODE =>PDO::ERRMODE_EXCEPTION]);
   // set the PDO error mode to exception
   
-} catch(PDOException $e) {
+ } catch(PDOException $e) {
   echo "Connection failed: " . $e->getMessage();
 }
       
@@ -19,10 +20,7 @@
         $server = 'localhost';
         $userName = 'root';
         $password = '';
-        $dbName = 'ibuy';
-//      $conn = new PDO("mysql:host=$servername;dbname=$dbName", $userName, $password);
-//  set the PDO error mode to exception
-//   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $dbName = 'assignment1';
 
         $conn = new Mysqli($server,$userName,$password,$dbName);
         $increaseCountSql = "UPDATE `$table` SET tbl_used_count = tbl_used_count + 1 WHERE `id` = '$id'";
@@ -33,10 +31,8 @@
         $server = 'localhost';
         $userName = 'root';
         $password = '';
-        $dbName = 'ibuy';
-        // $conn = new PDO("mysql:host=$servername;dbname=$dbName", $userName, $password);
-  // set the PDO error mode to exception
-//   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $dbName = 'assignment1';
+        
 $conn = new Mysqli($server,$userName,$password,$dbName);        
 $increaseCountSql = "UPDATE `$table` SET tbl_used_count = tbl_used_count - 1 WHERE `id` = '$id'";
         $conn->query($increaseCountSql);
@@ -46,14 +42,12 @@ $increaseCountSql = "UPDATE `$table` SET tbl_used_count = tbl_used_count - 1 WHE
         $server = 'localhost';
         $userName = 'root';
         $password = '';
-        $dbName = 'ibuy';
-        // $conn = new PDO("mysql:host=$servername;dbname=$dbName", $userName, $password);
-  // set the PDO error mode to exception
-//   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $dbName = 'assignment1';
+       
 $conn = new Mysqli($server,$userName,$password,$dbName);
         $increaseCountSql = "SELECT * FROM `$table` WHERE `$col` = '$id'";
         $count = $conn->query($increaseCountSql);
-        return $count->num_rows;
+        return $count->rowCount();
     }
 
     // countPlus('tbl_auctions','2');

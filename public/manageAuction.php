@@ -57,7 +57,7 @@
                                     $getUsersDataSql = "SELECT * FROM `tbl_auctions` WHERE added_by = '{$_SESSION['user_email']}' ORDER BY id DESC";
                                 }
                                 $result = $conn->query($getUsersDataSql);
-                                while($data = $result->fetch_assoc()){
+                                while($data = $result->fetch(PDO::FETCH_ASSOC)){
                             ?>
                             <tr>
                                 <td><?php echo $i ?></td>
@@ -66,7 +66,7 @@
                                 <td>
                                     <?php
                                         $getCategory = $conn->query("SELECT * FROM tbl_categories WHERE id = '{$data['category_id']}' limit 1");
-                                        $category = $getCategory->fetch_assoc();
+                                        $category = $getCategory->fetch(PDO::FETCH_ASSOC);;
                                         echo $category['category_name']; 
                                     ?>
                                 </td>
@@ -93,6 +93,8 @@
     </body>
 </html>
 <?php }else{
-    header("Location: ./login.php");
+    // header("Location: ./login.php");
+    echo '<script>window.location.href="login.php"</script>';
+
 }
 ?>

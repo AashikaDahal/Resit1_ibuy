@@ -6,5 +6,6 @@
     $_SESSION['user_email'] = '';
     // unset($_SESSION);
 
-    header("Location: ./login.php");
+    // header("Location: ./login.php");
+    echo '<script>window.location.href="login.php"</script>';
 ?>

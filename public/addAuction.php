@@ -47,7 +47,7 @@
                                     <?php
                                         $getCategoryDataSql = "SELECT * FROM `tbl_categories`";
                                         $getCategories = $conn->query($getCategoryDataSql);
-                                        while ($data = $getCategories->fetch_assoc()) {
+                                        while ($data = $getCategories->fetch(PDO::FETCH_ASSOC)) {
                                             echo '<option value="'.$data['id'].'">'.$data['category_name'].'</option>';
                                         }
                                     ?>
@@ -80,7 +80,9 @@
     </html>
         <?php
     }else{
-        header("Location: ./login.php");
+        // header("Location: ./login.php");
+        echo '<script>window.location.href="login.php"</script>';
+
     }
 
 ?>

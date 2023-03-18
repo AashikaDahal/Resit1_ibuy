@@ -8,7 +8,7 @@
         $id =  ($_GET['id']);
         $sqlGetCategoryExists = "SELECT * FROM `tbl_categories` WHERE id = '$id'";
         $getCategoryExists = $conn ->query($sqlGetCategoryExists);
-        $data = $getCategoryExists->fetch_assoc();
+        $data = $getCategoryExists->fetch(PDO::FETCH_ASSOC);;
 ?>
 <!DOCTYPE html>
     <html>
@@ -53,6 +53,8 @@
         </body>
     </html>
     <?php }else{
-    header("Location: ./login.php");
+
+    echo '<script>window.location.href="login.php"</script>';
+
 }
 ?>

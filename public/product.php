@@ -8,7 +8,7 @@
     $getAuctionDataSql = "SELECT * FROM `tbl_auctions` WHERE `id` = '$id'";
     // echo $getAuctionDataSql;
     $getAuctionData = $conn->query($getAuctionDataSql);
-    $data = $getAuctionData->fetch_assoc();
+    $data = $getAuctionData->fetch(PDO::FETCH_ASSOC);;
 
    
 ?>
@@ -56,7 +56,7 @@
         <?php 
           $getUsersDataSql = "SELECT * FROM `tbl_categories` ORDER BY id ASC";
           $result = $conn->query($getUsersDataSql);
-          while($data1 = $result->fetch_assoc()){
+          while($data1 = $result->fetch(PDO::FETCH_ASSOC)){
         ?>
         <li><a class="categoryLink" href="./categories.php?id=<?php echo $data1['id'] ?>"><?php echo $data1['category_name'] ?></a></li>
         <?php } ?>
@@ -75,7 +75,7 @@
           <h3>
             <?php
                 $getCategory = $conn->query("SELECT * FROM tbl_categories WHERE id = '{$data['category_id']}' limit 1");
-                $category = $getCategory->fetch_assoc();
+                $category = $getCategory->fetch(PDO::FETCH_ASSOC);;
                 echo $category['category_name']; 
             ?>
           </h3>
@@ -83,7 +83,7 @@
             <a href="javascript:void(0)">
                 <?php
                     $getCategory = $conn->query("SELECT * FROM tbl_users WHERE email = '{$data['added_by']}' limit 1");
-                    $category = $getCategory->fetch_assoc();
+                    $category = $getCategory->fetch(PDO::FETCH_ASSOC);;
                     echo $category['fullname']; 
                 ?>
             </a>
@@ -91,8 +91,8 @@
           <p class="price">Current Highest bid: £ <?php
                 $getMyBidSql = "SELECT * FROM tbl_bids WHERE product_id = '{$data['id']}' ORDER BY price DESC LIMIT 1";
                 $getMyBidData = $conn->query($getMyBidSql);
-                if($getMyBidData->num_rows > 0){
-                    while($row = $getMyBidData->fetch_assoc()){
+                if($getMyBidData->rowCount() > 0){
+                    while($row = $getMyBidData->fetch(PDO::FETCH_ASSOC)){
                         echo (float)$row['price'];
                     }
                 }else{
@@ -104,7 +104,7 @@
               if(isset($_SESSION['user_id'])){
                 $getMyBidSql = "SELECT * FROM tbl_bids WHERE user_id = '{$_SESSION['user_id']}' AND product_id = '{$data['id']}' ORDER BY price DESC LIMIT 1";
                 $getMyBidData = $conn->query($getMyBidSql);
-                while($row = $getMyBidData->fetch_assoc()){
+                while($row = $getMyBidData->fetch(PDO::FETCH_ASSOC)){
                     echo 'My bid: £'.(float)$row['price'].'&emsp; <a href="./operation/bid_operation.php?action=delete&id='.$row['id'].'" style="color:red;">Delete Bid</a>';
                 }
               }
@@ -130,10 +130,10 @@
           <?php
                 $getMyReviewSql = "SELECT * FROM tbl_review WHERE product_id = '{$data['id']}'";
                 $getMyReviewData = $conn->query($getMyReviewSql);
-                while($row1 = $getMyReviewData->fetch_assoc()){
+                while($row1 = $getMyReviewData->fetch(PDO::FETCH_ASSOC)){
                     $getUserSql="SELECT * FROM tbl_users WHERE id ='{$row1['user_id']}'";
                     $getUserData = $conn->query($getUserSql);
-                    $user = $getUserData->fetch_assoc();
+                    $user = $getUserData->fetch(PDO::FETCH_ASSOC);
                     echo '<li><strong> '.$user['fullname'].' </strong> &emsp;'.$row1['review'].' <em>'.$row1['added_on'].' </em>&emsp;';
                     if(isset($_SESSION['user_id'])){
                       if(($_SESSION['user_id'] != '') && $_SESSION['user_id'] == $row1['user_id']) {

@@ -6,10 +6,11 @@
             unset($_SESSION['error_message']);
         }
         // echo checkCount("tbl_categories", "2");
-        $id = $conn->real_escape_string($_GET['id']);
-        $getUsersDataSql = "SELECT * FROM `tbl_auctions` WHERE `id` ='$id'";
+        $id = $_GET['id'];
+        $getUsersDataSql = "SELECT * FROM `tbl_auctions` WHERE `id` =$id";
         $result = $conn->query($getUsersDataSql);
-        $data = $result->fetch_assoc();
+        $data = $result->fetch(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
     <html>
@@ -54,7 +55,7 @@
                                     <?php
                                         $getCategoryDataSql = "SELECT * FROM `tbl_categories`";
                                         $getCategories = $conn->query($getCategoryDataSql);
-                                        while ($data2 = $getCategories->fetch_assoc()) {
+                                        while ($data2 = $getCategories->fetch(PDO::FETCH_ASSOC)) {
                                             if($data['category_id'] == $data2['id']){
                                                 $selected = 'selected';
                                             }else{
@@ -92,7 +93,9 @@
     </html>
         <?php
     }else{
-        header("Location: ./login.php");
+        // header("Location: ./login.php");
+        echo '<script>window.location.href="login.php"</script>';
+
     }
 
 ?>

@@ -8,10 +8,10 @@
      }
     if(isset($_POST['action'])){
         if($_POST['action'] == 'register'){
-            $name =  $conn -> real_escape_string($_POST['name']);
-            $email =  $conn -> real_escape_string($_POST['email']);
-            $password =  $conn -> real_escape_string($_POST['password']);
-            $role =  $conn -> real_escape_string($_POST['role']);
+            $name = $_POST['name'];
+            $email =  $_POST['email'];
+            $password =   $_POST['password'];
+            $role =   $_POST['role'];
 
             //hashed password
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -22,7 +22,7 @@
             $checkEmailExists = $conn ->query($sqlCheckEmailExists);
             
             //check email address already exists
-            if($checkEmailExists->num_rows >= 1) {
+            if($checkEmailExists->rowCount() >= 1) {
                 // echo 'working with email';
                 $_SESSION['error_message'] ="Email Already Exit";
                 header("Location: ../register.php");
@@ -33,7 +33,7 @@
                 if($sqlInsertUser){
                     $_SESSION['error_message'] ="New User Added Successfully";
                     if($role == 'admin'){
-                        // header("Location: " . $_SERVER['HTTP_REFERER']);
+                        // echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                         // $_SESSION['user_role'] = $role;
                         // $_SESSION['user_id'] = $data['id'];
                         // $_SESSION['user_email'] = $data['email'];
@@ -43,7 +43,7 @@
                     }
                 }else{
                     $_SESSION['error_message'] ="Sorry Some Issue Ocurred";
-                    header("Location: " . $_SERVER['HTTP_REFERER']);
+                    echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                 }
             }
            
@@ -54,14 +54,14 @@
             // var_dump($_POST);
             // echo '</pre>';
 
-            $email =  $conn -> real_escape_string($_POST['email']);
-            $password =  $conn -> real_escape_string($_POST['password']);
+            $email =  $_POST['email'];
+            $password =  $_POST['password'];
 
             $sqlCheckEmailExists = "SELECT * FROM `tbl_users` WHERE email = '$email' limit 1";
             $checkEmailExists = $conn ->query($sqlCheckEmailExists);
 
-            if($checkEmailExists->num_rows == 1){
-                $data = $checkEmailExists->fetch_assoc();
+            if($checkEmailExists->rowCount() == 1){
+                $data = $checkEmailExists->fetch(PDO::FETCH_ASSOC);;
                 if(password_verify($password, $data['hashed_password'])){
                     $_SESSION['user_role'] = $data['role'];
                     $_SESSION['user_id'] = $data['id'];
@@ -73,11 +73,11 @@
                     // }
                 }else{
                     $_SESSION['error_message'] ="Sorry wrong password";
-                header("Location: " . $_SERVER['HTTP_REFERER']);
+                echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                 }
             }else{
                 $_SESSION['error_message'] ="Sorry wrong email address";
-                header("Location: " . $_SERVER['HTTP_REFERER']);
+                echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
             }
 
 
@@ -91,10 +91,10 @@
             // var_dump($_GET);
             // echo '</pre>';
 
-            $id = $conn->real_escape_string($_GET['id']);
+            $id = $conn->$_GET['id'];
             $getUsersDataSql = "SELECT * FROM `tbl_users` WHERE `id` ='$id'";
             $result = $conn->query($getUsersDataSql);
-            $data = $result->fetch_assoc();
+            $data = $result->fetch(PDO::FETCH_ASSOC);
 
             // check if data is used in somewhere else or not
             if($data['tbl_used_count'] == NULL || $data['tbl_used_count'] == 0){
@@ -108,20 +108,20 @@
                         header("Location: ../login.php");
                     }else{
                         $_SESSION['error_message'] ="Sorry Some Technical Error Ocurred";
-                        header("Location: " . $_SERVER['HTTP_REFERER']);
+                        echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                     }
                 }else{
                     if($conn->query($deleteUserDataSql)==TRUE && $conn->affected_rows > 0){
                         $_SESSION['error_message'] ="Data Delete Successfully";
-                        header("Location: " . $_SERVER['HTTP_REFERER']);
+                        echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                     }else{
                         $_SESSION['error_message'] ="Sorry Some Technical Error Ocurred";
-                        header("Location: " . $_SERVER['HTTP_REFERER']);
+                        echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
                     }
                 }
             }else{
                 $_SESSION['error_message'] ="Sorry Data Is Used In Somewhere Else";
-                header("Location: " . $_SERVER['HTTP_REFERER']);
+                echo '<script>window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
             }
         }
     }

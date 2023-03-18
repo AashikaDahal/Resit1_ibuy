@@ -44,8 +44,9 @@
         <?php 
           $getUsersDataSql ="SELECT * FROM `tbl_categories` ORDER BY id ASC";
           $result = $conn->query($getUsersDataSql);
+          $result->execute();
           // if($result){
-            while($data = $result->fetch_assoc()){
+            while($data = $result->fetch(PDO::FETCH_ASSOC)){
          
         ?>
         <li><a class="categoryLink" href="./categories.php?id=<?php echo $data['id'] ?>"><?php echo $data['category_name'] ?></a></li>
@@ -64,7 +65,9 @@
       <?php
       $getUsersDataSql = "SELECT * FROM `tbl_auctions` ORDER BY id DESC";
       $result = $conn->query($getUsersDataSql);
-      while($data = $result->fetch_assoc()){
+      $result->execute();
+          // if($result){
+            while($data = $result->fetch(PDO::FETCH_ASSOC)){
       ?>
         <a href="./product.php?id=<?php echo $data['id'] ?>">
           <div class="card">
@@ -75,7 +78,7 @@
                 <p>
                     <?php
                       $getCategory = $conn->query("SELECT * FROM tbl_categories WHERE id = '{$data['category_id']}' limit 1");
-                      $category = $getCategory->fetch_assoc();
+                      $category = $getCategory->fetch(PDO::FETCH_ASSOC);
                       echo $category['category_name']; 
                     ?>
                 </p> 
@@ -87,8 +90,10 @@
           </div>
         </a>
         <?php
-        //  }
-      }
+         }
+      
+  
+    
       ?>
       </div>
       <footer>&copy; ibuy <?php echo date('Y') ?></footer>

@@ -4,12 +4,7 @@
         echo '<script> alert("'.$_SESSION['error_message'].'")</script>';
         unset($_SESSION['error_message']);
     }
-    // $checkData = $conn->query("SELECT * FROM tbl_users");
-    // var_dump($checkData);
-    // if($checkData->num_rows){
-    //     $sqlCreateUsersTable = "CREATE TABLE `tbl_users` ( `id` INT NOT NULL AUTO_INCREMENT , `fullname` VARCHAR(256) NULL , `email` VARCHAR(256) NULL , `hashed_password` VARCHAR(256) NULL , `salt` VARCHAR(256) NULL , `role` VARCHAR(256) NULL , `entry_type` ENUM('Auto','Mannual') DEFAULT 'Auto' , `tbl_used_count` INT(10) DEFAULT 0 , `added_by` VARCHAR(256) NULL , `updated_by` VARCHAR(256) NULL , `added_on` DATETIME NULL , `updated_on` DATETIME NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
-    //     $createTableUses = $conn ->query($sqlCreateUsersTable) or die(mysqli_error());
-    // }
+    
 
 
     // this is for admin login 
@@ -21,8 +16,8 @@
     $sqlCheckEmailExists = "SELECT * FROM `tbl_users` WHERE email = '$email' limit 1";
     $checkEmailExists = $conn ->query($sqlCheckEmailExists);
     //var_dump($checkEmailExists);
-    if($checkEmailExists->num_rows == 1){
-        $data = $checkEmailExists->fetch_assoc();
+    if($checkEmailExists->rowCount() == 1){
+        $data = $checkEmailExists->fetch(PDO::FETCH_ASSOC);
         if(!password_verify($password, $data['hashed_password'])){
             $sqlInsertUser = "INSERT INTO `tbl_users` (`fullname`,`email`, `hashed_password`, `role`, `entry_type`)VALUES('$fullname','$email','$hashed_password','admin','Mannual')";
             $insertUserData = $conn -> query($sqlInsertUser);

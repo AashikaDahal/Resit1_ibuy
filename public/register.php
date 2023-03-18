@@ -14,8 +14,8 @@
     $sqlCheckEmailExists = "SELECT * FROM `tbl_users` WHERE email = '$email' limit 1";
     $checkEmailExists = $conn ->query($sqlCheckEmailExists);
 
-    if($checkEmailExists->num_rows == 1){
-        $data = $checkEmailExists->fetch_assoc();
+    if($checkEmailExists->rowCount() == 1){
+        $data = $checkEmailExists->fetch(PDO::FETCH_ASSOC);;
         if(!password_verify($password, $data['hashed_password'])){
             $sqlInsertUser = "INSERT INTO `tbl_users` (`fullname`,`email`, `hashed_password`, `role`, `entry_type`)VALUES('$fullname','$email','$hashed_password','admin','Mannual')";
             $insertUserData = $conn -> query($sqlInsertUser);
